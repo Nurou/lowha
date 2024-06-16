@@ -71,16 +71,9 @@ h6 {
     isolation: isolate;
 }
 
-
 /*
-    Remove default button styles
+ Custom CSS
  */
-/* button { */
-/*     all: unset */
-/* } */
-
-
-
 
 .pushable:active .front {
     transform: translateY(-2px);
