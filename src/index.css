@@ -8,14 +8,14 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /*
   2. Remove default margin
 */
 * {
-    margin: 0;
+  margin: 0;
 }
 
 /*
@@ -24,8 +24,8 @@
   4. Improve text rendering
 */
 body {
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 /*
@@ -36,8 +36,8 @@ picture,
 video,
 canvas,
 svg {
-    display: block;
-    max-width: 100%;
+  display: block;
+  max-width: 100%;
 }
 
 /*
@@ -47,7 +47,7 @@ input,
 button,
 textarea,
 select {
-    font: inherit;
+  font: inherit;
 }
 
 /*
@@ -60,7 +60,7 @@ h3,
 h4,
 h5,
 h6 {
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /*
@@ -68,13 +68,63 @@ h6 {
 */
 #root,
 #__next {
-    isolation: isolate;
+  isolation: isolate;
 }
 
 /*
  Custom CSS
  */
 
+:root {
+  --form-control-color: #b91c1c;
+}
+
 .pushable:active .front {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
+}
+
+body {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  height: 100vh;
+}
+
+input[type='radio'] {
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: var(--form-background);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: currentColor;
+  width: 0.75em;
+  height: 0.75em;
+  border: 0.05em solid currentColor;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+
+  display: grid;
+  place-content: center;
+}
+
+input[type='radio']::before {
+  content: '';
+  width: 0.35em;
+  height: 0.35em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 0.5em 0.5em var(--form-control-color);
+  /* Windows High Contrast Mode */
+  background-color: CanvasText;
+}
+
+input[type='radio']:checked::before {
+  transform: scale(1);
+}
+
+input[type='radio']:focus {
+  /* outline: max(2px, 0.05em) solid currentColor; */
+  outline-offset: max(2px, 0.15em);
 }
