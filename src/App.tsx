@@ -19,17 +19,22 @@ const modes = {
   },
   saakin_a: {
     arabicName: 'فتحة ساكنة',
-    englishName: 'Saakin preceded by Maftuuh',
+    englishName: 'Saakin ( \ufe7f ) preceded by maftuuh ( \ufe77 )',
     medial: null,
   },
   saakin_u: {
     arabicName: 'ضمة ساكنة',
-    englishName: 'Saakin preceded by Madhmuum',
+    englishName: 'Saakin ( \ufe7f ) preceded by madhmuum ( \ufe79 )',
     medial: null,
   },
   saakin_i: {
     arabicName: 'كسرة ساكنة',
-    englishName: 'Saakin preceded by Maksuur',
+    englishName: 'Saakin ( \ufe7f ) preceded by maksuur ( \ufe7b )',
+    medial: null,
+  },
+  combined: {
+    arabicName: 'مجموع',
+    englishName: 'Combined',
     medial: null,
   },
 };
@@ -42,277 +47,309 @@ type ExpandUnion<T extends string> = {
 
 type Alphabet = {
   [key: string]: {
-    letter: string;
-    saakin_a: string;
-    saakin_u: string;
-    saakin_i: string;
+    base: string;
   } & ExpandUnion<Mode>;
 };
 
 const alphabet: Alphabet = {
   hamzah: {
-    letter: 'أ',
+    base: 'أ',
     saakin_a: 'أءْ',
     saakin_u: 'أءْ',
     saakin_i: 'أءْ',
     a: 'أَ',
     u: 'أُ',
     i: 'أِ',
+    combined: 'أ',
   },
   beh: {
-    letter: 'ب',
+    base: 'ب',
     saakin_a: 'أَبْ',
     saakin_u: 'أُبْ',
     saakin_i: 'أِبْ',
     a: 'بَ',
     u: 'بُ',
     i: 'بِ',
+    combined: 'ب',
   },
   teh: {
-    letter: 'ت',
+    base: 'ت',
     saakin_a: 'أَتْ',
     saakin_u: 'أُتْ',
     saakin_i: 'أِتْ',
     a: 'تَ',
     u: 'تُ',
     i: 'تِ',
+    combined: 'ت',
   },
   theh: {
-    letter: 'ث',
+    base: 'ث',
     saakin_a: 'أَثْ',
     saakin_u: 'أُثْ',
     saakin_i: 'أِثْ',
     a: 'ثَ',
     u: 'ثُ',
     i: 'ثِ',
+    combined: 'ث',
   },
   jeem: {
-    letter: 'ج',
+    base: 'ج',
     saakin_a: 'أَجْ',
     saakin_u: 'أُجْ',
     saakin_i: 'أِجْ',
     a: 'جَ',
     u: 'جُ',
     i: 'جِ',
+    combined: 'ج',
   },
   hah: {
-    letter: 'ح',
+    base: 'ح',
     saakin_a: 'أَحْ',
     saakin_u: 'أُحْ',
     saakin_i: 'أِحْ',
     a: 'حَ',
     u: 'حُ',
     i: 'حِ',
+    combined: 'ح',
   },
   khah: {
-    letter: 'خ',
+    base: 'خ',
     saakin_a: 'أَخْ',
     saakin_u: 'أُخْ',
     saakin_i: 'أِخْ',
     a: 'خَ',
     u: 'خُ',
     i: 'خِ',
+    combined: 'خ',
   },
   dal: {
-    letter: 'د',
+    base: 'د',
     saakin_a: 'أَدْ',
     saakin_u: 'أُدْ',
     saakin_i: 'أِدْ',
     a: 'دَ',
     u: 'دُ',
     i: 'دِ',
+    combined: 'د',
   },
   thal: {
-    letter: 'ذ',
+    base: 'ذ',
     saakin_a: 'أَذْ',
     saakin_u: 'أُذْ',
     saakin_i: 'أِذْ',
     a: 'ذَ',
     u: 'ذُ',
     i: 'ذِ',
+    combined: 'ذ',
   },
   ra: {
-    letter: 'ر',
+    base: 'ر',
     saakin_a: 'أَرْ',
     saakin_u: 'أُرْ',
     saakin_i: 'أِرْ',
     a: 'رَ',
     u: 'رُ',
     i: 'رِ',
+    combined: 'ر',
   },
   zay: {
-    letter: 'ز',
+    base: 'ز',
     saakin_a: 'أَزْ',
     saakin_u: 'أُزْ',
     saakin_i: 'أِزْ',
     a: 'زَ',
     u: 'زُ',
     i: 'زِ',
+    combined: 'ز',
   },
   seen: {
-    letter: 'س',
+    base: 'س',
     saakin_a: 'أَسْ',
     saakin_u: 'أُسْ',
     saakin_i: 'أِسْ',
     a: 'سَ',
     u: 'سُ',
     i: 'سِ',
+    combined: 'س',
   },
   sheen: {
-    letter: 'ش',
+    base: 'ش',
     saakin_a: 'أَشْ',
     saakin_u: 'أُشْ',
     saakin_i: 'أِشْ',
     a: 'شَ',
     u: 'شُ',
     i: 'شِ',
+    combined: 'ش',
   },
   sad: {
-    letter: 'ص',
+    base: 'ص',
     saakin_a: 'أَصْ',
     saakin_u: 'أُصْ',
     saakin_i: 'أِصْ',
     a: 'صَ',
     u: 'صُ',
     i: 'صِ',
+    combined: 'ص',
   },
   dad: {
-    letter: 'ض',
+    base: 'ض',
     saakin_a: 'أَضْ',
     saakin_u: 'أُضْ',
     saakin_i: 'أِضْ',
     a: 'ضَ',
     u: 'ضُ',
     i: 'ضِ',
+    combined: 'ض',
   },
   tah: {
-    letter: 'ط',
+    base: 'ط',
     saakin_a: 'أَطْ',
     saakin_u: 'أُطْ',
     saakin_i: 'أِطْ',
     a: 'طَ',
     u: 'طُ',
     i: 'طِ',
+    combined: 'ط',
   },
   zah: {
-    letter: 'ظ',
+    base: 'ظ',
     saakin_a: 'أَظْ',
     saakin_u: 'أُظْ',
     saakin_i: 'أِظْ',
     a: 'ظَ',
     u: 'ظُ',
     i: 'ظِ',
+    combined: 'ظ',
   },
   ain: {
-    letter: 'ع',
+    base: 'ع',
     saakin_a: 'أَعْ',
     saakin_u: 'أُعْ',
     saakin_i: 'أِعْ',
     a: 'عَ',
     u: 'عُ',
     i: 'عِ',
+    combined: 'ع',
   },
   ghain: {
-    letter: 'غ',
+    base: 'غ',
     saakin_a: 'أَغْ',
     saakin_u: 'أُغْ',
     saakin_i: 'أِغْ',
     a: 'غَ',
     u: 'غُ',
     i: 'غِ',
+    combined: 'غ',
   },
   feh: {
-    letter: 'ف',
+    base: 'ف',
     saakin_a: 'أَفْ',
     saakin_u: 'أُفْ',
     saakin_i: 'أِفْ',
     a: 'فَ',
     u: 'فُ',
     i: 'فِ',
+    combined: 'ف',
   },
   qaf: {
-    letter: 'ق',
+    base: 'ق',
     saakin_a: 'أَقْ',
     saakin_u: 'أُقْ',
     saakin_i: 'أِقْ',
     a: 'قَ',
     u: 'قُ',
     i: 'قِ',
+    combined: 'ق',
   },
   kaf: {
-    letter: 'ك',
+    base: 'ك',
     saakin_a: 'أَكْ',
     saakin_u: 'أُكْ',
     saakin_i: 'أِكْ',
     a: 'كَ',
     u: 'كُ',
     i: 'كِ',
+    combined: 'ك',
   },
   lam: {
-    letter: 'ل',
+    base: 'ل',
     saakin_a: 'أَلْ',
     saakin_u: 'أُلْ',
     saakin_i: 'أِلْ',
     a: 'لَ',
     u: 'لُ',
     i: 'لِ',
+    combined: 'ل',
   },
   meem: {
-    letter: 'م',
+    base: 'م',
     saakin_a: 'أَمْ',
     saakin_u: 'أُمْ',
     saakin_i: 'أِمْ',
     a: 'مَ',
     u: 'مُ',
     i: 'مِ',
+    combined: 'م',
   },
   noon: {
-    letter: 'ن',
+    base: 'ن',
     saakin_a: 'أَنْ',
     saakin_u: 'أُنْ',
     saakin_i: 'أِنْ',
     a: 'نَ',
     u: 'نُ',
     i: 'نِ',
+    combined: 'ن',
   },
   ha: {
-    letter: 'ه',
+    base: 'ه',
     saakin_a: 'أَهْ',
     saakin_u: 'أُهْ',
     saakin_i: 'أِهْ',
     a: 'هَ',
     u: 'هُ',
     i: 'هِ',
+    combined: 'ه',
   },
   waw: {
-    letter: 'و',
+    base: 'و',
     saakin_a: 'أَوْ',
     saakin_u: 'أُوْ',
     saakin_i: 'أِوْ',
     a: 'وَ',
     u: 'وُ',
     i: 'وِ',
+    combined: 'و',
   },
   ya: {
-    letter: 'ي',
+    base: 'ي',
     saakin_a: 'أَيْ',
     saakin_u: 'أُيْ',
     saakin_i: 'أِيْ',
     a: 'يَ',
     u: 'يُ',
     i: 'يِ',
+    combined: 'ي',
   },
 } as const;
 
 const playSound = ({
   letter,
   audioRefs,
+  currentlyPlayingRef,
   mode,
 }: {
   letter: string;
   audioRefs: React.MutableRefObject<Record<string, Record<Mode, HTMLAudioElement>>>;
+  currentlyPlayingRef: React.MutableRefObject<HTMLAudioElement | null>;
   mode: Mode;
 }) => {
+  // stop currently playing audio
+  if (currentlyPlayingRef.current) {
+    currentlyPlayingRef.current.pause();
+  }
+
   if (!audioRefs.current[letter]) {
     audioRefs.current[letter] = {} as Record<Mode, HTMLAudioElement>;
   }
@@ -322,12 +359,13 @@ const playSound = ({
   if (storedAudio) {
     storedAudio.currentTime = 0; // reset to start
     storedAudio.play();
+    currentlyPlayingRef.current = storedAudio;
     return;
   } else {
-    // create new audio element
-    const path = `/assets/audio/${letter}/${mode}.mp3`;
+    const path = mode === 'combined' ? `/assets/audio/combined/${letter}.mp3` : `/assets/audio/${letter}/${mode}.mp3`;
     const audio = new Audio(path);
     audio.play();
+    currentlyPlayingRef.current = audio;
     // store in ref for future use
     audioRefs.current[letter][mode] = audio;
   }
@@ -340,6 +378,8 @@ const missingModes: Record<keyof typeof alphabet, Mode[]> = {
 
 function App() {
   const audioRefs = useRef({});
+  const currentlyPlayingRef = useRef(null);
+
   const defaultMode = 'a';
   const [selectedMode, setSelectedMode] = useState<Mode>(defaultMode);
 
@@ -373,25 +413,24 @@ function App() {
           {Object.keys(alphabet).map((letter, index) => {
             const modeIsMissing = missingModes[letter]?.includes(selectedMode);
 
+            if (modeIsMissing) {
+              return null;
+            }
+
             return (
               <button
                 key={index}
-                className={cx(
-                  !modeIsMissing && 'pushable',
-                  'bg-stone-400',
-                  'rounded-2xl border-none p-0 outline-offset-4'
-                )}
-                onClick={() => playSound({ letter, audioRefs, mode: selectedMode })}
+                className={cx('pushable', 'bg-stone-400', 'rounded-2xl border-none p-0 outline-offset-4')}
+                onClick={() => playSound({ letter, audioRefs, currentlyPlayingRef, mode: selectedMode })}
                 disabled={modeIsMissing}
               >
                 <span
                   className={cx(
-                    !modeIsMissing && 'front',
-                    'block p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px]',
-                    modeIsMissing && 'opacity-50'
+                    'front',
+                    'block p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px]'
                   )}
                 >
-                  {modeIsMissing ? '🔇' : alphabet[letter][selectedMode]}
+                  {alphabet[letter][selectedMode]}
                 </span>
               </button>
             );
