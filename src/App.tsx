@@ -51,13 +51,13 @@ type Alphabet = {
 
 const alphabet: Alphabet = {
   hamzah: {
-    letter: 'ء',
+    letter: 'أ',
     saakin_a: 'أءْ',
     saakin_u: 'أءْ',
     saakin_i: 'أءْ',
-    a: 'ءَ',
-    u: 'ءُ',
-    i: 'ءِ',
+    a: 'أَ',
+    u: 'أُ',
+    i: 'أِ',
   },
   beh: {
     letter: 'ب',
@@ -316,7 +316,6 @@ const playSound = ({
   if (!audioRefs.current[letter]) {
     audioRefs.current[letter] = {} as Record<Mode, HTMLAudioElement>;
   }
-
   // check if audio element already exists
   const storedAudio = audioRefs.current[letter][mode];
 
@@ -332,6 +331,11 @@ const playSound = ({
     // store in ref for future use
     audioRefs.current[letter][mode] = audio;
   }
+};
+
+const missingModes: Record<keyof typeof alphabet, Mode[]> = {
+  ya: ['saakin_u'],
+  waw: ['saakin_i'],
 };
 
 function App() {
@@ -365,23 +369,33 @@ function App() {
             );
           })}
         </div>
-        <div className='grid place-items-center md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-8'>
-          {Object.keys(alphabet).map((letter, index) => (
-            <button
-              key={index}
-              className={cx('pushable', 'bg-stone-400', 'rounded-2xl border-none p-0 outline-offset-4')}
-              onClick={() => playSound({ letter, audioRefs, mode: selectedMode })}
-            >
-              <span
+        <div dir='rtl' className='grid place-items-center md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-8'>
+          {Object.keys(alphabet).map((letter, index) => {
+            const modeIsMissing = missingModes[letter]?.includes(selectedMode);
+
+            return (
+              <button
+                key={index}
                 className={cx(
-                  'front',
-                  'block p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px]'
+                  !modeIsMissing && 'pushable',
+                  'bg-stone-400',
+                  'rounded-2xl border-none p-0 outline-offset-4'
                 )}
+                onClick={() => playSound({ letter, audioRefs, mode: selectedMode })}
+                disabled={modeIsMissing}
               >
-                {alphabet[letter][selectedMode]}
-              </span>
-            </button>
-          ))}
+                <span
+                  className={cx(
+                    !modeIsMissing && 'front',
+                    'block p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px]',
+                    modeIsMissing && 'opacity-50'
+                  )}
+                >
+                  {modeIsMissing ? '🔇' : alphabet[letter][selectedMode]}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
