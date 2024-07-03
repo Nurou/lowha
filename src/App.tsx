@@ -342,8 +342,8 @@ function App() {
   return (
     <div className={cx('grid place-items-center p-8 bg-stone-200 h-full', "bg-[url('/moroccan.svg')]")}>
       <h1 className='text-4xl font-bold text-stone-600 py-8'>{'\ufdfd'}</h1>
-      <div className='border-4 border-stone-100 rounded-md p-4'>
-        <div className='flex flex-wrap text-4xl gap-4 p-8'>
+      <div className='border-4 border-stone-100 rounded-md p-8'>
+        <div className='flex flex-wrap max-w-[800px] flex-col sm:flex-row justify-center align-center text-2xl gap-4 p-8'>
           {Object.keys(modes).map((mode, index) => {
             const displayName = modes[mode as Mode].englishName;
             const medial = modes[mode as Mode].medial;
@@ -358,14 +358,14 @@ function App() {
                   defaultChecked={mode === defaultMode}
                   onChange={() => setSelectedMode(mode as Mode)}
                 />
-                <label dir='rtl' htmlFor={mode} className='text-stone-600'>
+                <label htmlFor={mode} className='text-stone-600'>
                   {displayName} {medial && `( ${medial} )`}
                 </label>
               </div>
             );
           })}
         </div>
-        <div dir='rtl' className='grid place-items-center md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-10'>
+        <div className='grid place-items-center md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-8'>
           {Object.keys(alphabet).map((letter, index) => (
             <button
               key={index}
