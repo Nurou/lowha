@@ -56,7 +56,7 @@ function App() {
   return (
     <div className={cx('grid place-items-center p-8 bg-stone-200 h-full', "bg-[url('/moroccan.svg')]")}>
       <h1 className='text-4xl font-bold text-stone-600 py-8'>{'\ufdfd'}</h1>
-      <div className='grid place-items-center p-8 text-2xl'>
+      <div className='grid place-items-center py-4 text-2xl'>
         <ModeSelect modes={modes} defaultMode={defaultMode} changeMode={setSelectedMode} />
       </div>
       <div className='border-4 border-stone-100 rounded-md p-8'>
