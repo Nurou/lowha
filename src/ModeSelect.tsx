@@ -20,10 +20,10 @@ export const ModeSelect = ({
 }) => {
   return (
     <Select defaultValue={defaultMode} onValueChange={(mode) => changeMode(mode as ModeKey)}>
-      <SelectTrigger className='w-[180px] text-xl'>
-        <SelectValue className='text-2xl' placeholder='Select a mode' />
+      <SelectTrigger className='text-2xl p-6 text-stone-200 bg-stone-700'>
+        <SelectValue className='text-2xl ' placeholder='Select a mode' />
       </SelectTrigger>
-      <SelectContent className='text-2xl'>
+      <SelectContent className='text-2xl text-stone-200 bg-stone-700'>
         <SelectGroup>
           <SelectLabel className='text-2xl'>Modes</SelectLabel>
           {Object.entries(modes).map(([key, value]) => (

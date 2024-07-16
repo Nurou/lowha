@@ -331,3 +331,5 @@ export const alphabet: Alphabet = {
     combined: 'ي',
   },
 } as const;
+
+export type Letter = keyof typeof alphabet;
