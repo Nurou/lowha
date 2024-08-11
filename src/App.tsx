@@ -4,66 +4,83 @@ import { ModeSelect } from './ModeSelect';
 import { Letter, ModeKey, alphabet, modes } from './constants';
 import { Pause } from 'lucide-react';
 
-type LetterToAudioElement = Record<Letter, Record<ModeKey, HTMLAudioElement>>;
+type LetterToAudioElement = Record<Letter, Record<ModeKey, HTMLAudioElement | null>>;
+
+const INITIAL_STORED_AUDIO = {
+  a: null,
+  u: null,
+  i: null,
+  combined: null,
+  saakin_a: null,
+  saakin_u: null,
+  saakin_i: null,
+} as const;
 
 const playSound = ({
   letter,
   audioRefs,
-  currentlyPlayingRef,
   mode,
   onEnded,
 }: {
   letter: string;
   audioRefs: React.MutableRefObject<LetterToAudioElement>;
-  currentlyPlayingRef: React.MutableRefObject<HTMLAudioElement | null>;
   mode: ModeKey;
   onEnded: () => void;
 }) => {
-  // stop currently playing audio
-  if (currentlyPlayingRef.current) {
-    currentlyPlayingRef.current.pause();
-  }
-
-  if (!audioRefs.current[letter]) {
-    audioRefs.current[letter] = {} as Record<ModeKey, HTMLAudioElement>;
-  }
   // check if audio element already exists
-  const storedAudio = audioRefs.current[letter][mode];
+  const storedModeAudio = audioRefs.current[letter]?.[mode];
 
-  if (storedAudio) {
-    storedAudio.currentTime = 0; // reset to start
-    storedAudio.play();
-    currentlyPlayingRef.current = storedAudio;
-    return;
+  let currentlyPlayingAudio: HTMLAudioElement | null = null;
+
+  if (storedModeAudio) {
+    storedModeAudio.currentTime = 0; // reset to start
+    storedModeAudio.play();
+    currentlyPlayingAudio = storedModeAudio;
   } else {
+    // create new audio
     const path = mode === 'combined' ? `/assets/audio/combined/${letter}.mp3` : `/assets/audio/${letter}/${mode}.mp3`;
-    const audio = new Audio(path);
-    audio.play();
-    currentlyPlayingRef.current = audio;
-    // store in ref for future use
-    audioRefs.current[letter][mode] = audio;
-    audio.onended = onEnded;
+    const newAudio = new Audio(path);
+    newAudio.play();
+    if (!audioRefs.current[letter]) {
+      audioRefs.current[letter] = { ...INITIAL_STORED_AUDIO };
+    }
+    // store in ref to avoid re-creating
+    audioRefs.current[letter][mode] = newAudio;
+    newAudio.onended = onEnded;
+    currentlyPlayingAudio = newAudio;
   }
 
-  currentlyPlayingRef.current.id = letter;
+  return currentlyPlayingAudio;
 };
 
-const pauseSound = (currentlyPlayingRef: React.MutableRefObject<HTMLAudioElement | null>) => {
-  if (currentlyPlayingRef.current) {
-    currentlyPlayingRef.current.pause();
-  }
-};
-
-const unavailableModes: Record<Letter, ModeKey[]> = {
+const letterToUnavailableModesMap: Record<Letter, ModeKey[]> = {
   ya: ['saakin_u'],
   waw: ['saakin_i'],
 };
 
 const DEFAULT_MODE = 'a';
 
+const pauseCurrentlyPlayingAudio = (currentlyPlayingRef: React.MutableRefObject<HTMLAudioElement | null>) => {
+  if (currentlyPlayingRef.current) {
+    currentlyPlayingRef.current.pause();
+  }
+};
+
+const clearCurrentlyPlayingAudioState = ({
+  currentlyPlayingAudioRef,
+  setCurrentlyPlayingLetter,
+}: {
+  currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
+}) => {
+  pauseCurrentlyPlayingAudio(currentlyPlayingAudioRef);
+  currentlyPlayingAudioRef.current = null;
+  setCurrentlyPlayingLetter(null);
+};
+
 function App() {
   const audioRefs = useRef<LetterToAudioElement>({});
-  const currentlyPlayingRef = useRef<HTMLAudioElement>(null);
+  const currentlyPlayingAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const [selectedMode, setSelectedMode] = useState<ModeKey>(DEFAULT_MODE);
   const [currentlyPlayingLetter, setCurrentlyPlayingLetter] = useState<string | null>(null);
@@ -77,41 +94,46 @@ function App() {
           defaultMode={DEFAULT_MODE}
           changeMode={(mode) => {
             setSelectedMode(mode);
-            pauseSound(currentlyPlayingRef);
-            setCurrentlyPlayingLetter(null);
+            clearCurrentlyPlayingAudioState({
+              currentlyPlayingAudioRef,
+              setCurrentlyPlayingLetter,
+            });
           }}
         />
       </div>
       <div className='border-4 border-stone-100 rounded-md p-8'>
         <div dir='rtl' className='grid place-items-center md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-8'>
           {Object.keys(alphabet).map((letter, index) => {
-            const modeIsMissing = unavailableModes[letter]?.includes(selectedMode);
+            const modeIsMissing = letterToUnavailableModesMap[letter]?.includes(selectedMode);
 
             if (modeIsMissing) {
               return null;
             }
 
-            const letterAudioIsPLaying = currentlyPlayingLetter === letter;
+            const letterIsCurrentlyPlaying = currentlyPlayingLetter === letter;
 
             return (
               <button
                 key={index}
                 className={cx('pushable', 'bg-stone-400', 'rounded-2xl border-none p-0 outline-offset-4')}
                 onClick={() => {
-                  if (letterAudioIsPLaying) {
-                    pauseSound(currentlyPlayingRef);
-                    setCurrentlyPlayingLetter(null);
+                  clearCurrentlyPlayingAudioState({
+                    currentlyPlayingAudioRef,
+                    setCurrentlyPlayingLetter,
+                  });
+
+                  if (letterIsCurrentlyPlaying) {
                     return;
                   }
 
-                  playSound({
+                  setCurrentlyPlayingLetter(letter);
+                  const currentlyPlayingAudio = playSound({
                     letter,
                     audioRefs,
-                    currentlyPlayingRef,
                     mode: selectedMode,
                     onEnded: () => setCurrentlyPlayingLetter(null),
                   });
-                  setCurrentlyPlayingLetter(letter);
+                  currentlyPlayingAudioRef.current = currentlyPlayingAudio;
                 }}
                 disabled={modeIsMissing}
               >
@@ -121,7 +143,7 @@ function App() {
                     'grid place-items-center p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px] min-h-[80px]'
                   )}
                 >
-                  {letterAudioIsPLaying ? <Pause /> : alphabet[letter][selectedMode]}
+                  {letterIsCurrentlyPlaying ? <Pause /> : alphabet[letter][selectedMode]}
                 </span>
               </button>
             );
