@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { useRef, useState } from 'react';
-import { ModeSelect } from './ModeSelect';
+import { ModeSelect } from './mode-select';
 import { ModeKey, modes } from './constants';
 import { Keyboard } from './keyboard';
 import { clearCurrentlyPlayingAudio } from './util';
