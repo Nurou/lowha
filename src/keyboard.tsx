@@ -4,6 +4,27 @@ import cx from 'classnames';
 import { alphabet, Letter, ModeKey } from './constants';
 import { clearCurrentlyPlayingAudio } from './util';
 
+type Shared = {
+  currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
+};
+
+type KeyboardProps = Shared & {
+  selectedMode: ModeKey;
+  currentlyPlayingLetter: string | null;
+};
+
+type KeyProps = Shared & {
+  letter: string;
+  currentlyPlayingLetter: string | null;
+  selectedMode: ModeKey;
+};
+
+type PlaySelectedLetterSoundArgs = Shared & {
+  letter: string;
+  selectedMode: ModeKey;
+};
+
 const letterToUnavailableModesMap: Record<Letter, ModeKey[]> = {
   ya: ['saakin_u'],
   waw: ['saakin_i'],
@@ -31,12 +52,7 @@ const playSelectedLetterSound = ({
   setCurrentlyPlayingLetter,
   letter,
   selectedMode,
-}: {
-  currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
-  setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
-  letter: string;
-  selectedMode: ModeKey;
-}) => {
+}: PlaySelectedLetterSoundArgs) => {
   const currentlyPlayingAudio = playSound({
     letter,
     mode: selectedMode,
@@ -58,15 +74,7 @@ const Key = ({
   currentlyPlayingAudioRef,
   setCurrentlyPlayingLetter,
   selectedMode,
-  modeIsMissing,
-}: {
-  letter: string;
-  currentlyPlayingLetter: string | null;
-  currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
-  setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
-  selectedMode: ModeKey;
-  modeIsMissing: boolean;
-}) => {
+}: KeyProps) => {
   const buttonLetterIsAlreadyPlaying = currentlyPlayingLetter === letter;
 
   return (
@@ -89,7 +97,6 @@ const Key = ({
           selectedMode,
         });
       }}
-      disabled={modeIsMissing}
     >
       <span
         className={cx(
@@ -108,12 +115,7 @@ export const Keyboard = ({
   currentlyPlayingLetter,
   currentlyPlayingAudioRef,
   setCurrentlyPlayingLetter,
-}: {
-  selectedMode: ModeKey;
-  currentlyPlayingLetter: string | null;
-  currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
-  setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
-}) =>
+}: KeyboardProps) =>
   Object.keys(alphabet).map((letter, index) => {
     const modeIsMissing = letterToUnavailableModesMap[letter]?.includes(selectedMode);
 
@@ -126,7 +128,6 @@ export const Keyboard = ({
         key={index.toString() + letter}
         letter={letter}
         selectedMode={selectedMode}
-        modeIsMissing={modeIsMissing}
         currentlyPlayingLetter={currentlyPlayingLetter}
         currentlyPlayingAudioRef={currentlyPlayingAudioRef}
         setCurrentlyPlayingLetter={setCurrentlyPlayingLetter}

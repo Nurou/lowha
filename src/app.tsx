@@ -5,7 +5,7 @@ import { ModeKey, modes } from './constants';
 import { Keyboard } from './keyboard';
 import { clearCurrentlyPlayingAudio } from './util';
 
-const DEFAULT_MODE = 'a';
+const DEFAULT_MODE = 'a'; // maftuuh
 
 const App = () => {
   const currentlyPlayingAudioRef = useRef<HTMLAudioElement | null>(null);
