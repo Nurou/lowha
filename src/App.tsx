@@ -27,20 +27,18 @@ const playSound = ({
   mode: ModeKey;
   onEnded: () => void;
 }) => {
+  let currentlyPlayingAudio: HTMLAudioElement | null = null;
+
   // check if audio element already exists
   const storedModeAudio = audioRefs.current[letter]?.[mode];
 
-  let currentlyPlayingAudio: HTMLAudioElement | null = null;
-
   if (storedModeAudio) {
     storedModeAudio.currentTime = 0; // reset to start
-    storedModeAudio.play();
     currentlyPlayingAudio = storedModeAudio;
   } else {
     // create new audio
     const path = mode === 'combined' ? `/assets/audio/combined/${letter}.mp3` : `/assets/audio/${letter}/${mode}.mp3`;
     const newAudio = new Audio(path);
-    newAudio.play();
     if (!audioRefs.current[letter]) {
       audioRefs.current[letter] = { ...INITIAL_STORED_AUDIO };
     }
@@ -48,6 +46,12 @@ const playSound = ({
     audioRefs.current[letter][mode] = newAudio;
     newAudio.onended = onEnded;
     currentlyPlayingAudio = newAudio;
+  }
+
+  try {
+    currentlyPlayingAudio.play().catch((error) => console.error('Error playing audio:', error));
+  } catch (error) {
+    console.error('Error playing audio:', error);
   }
 
   return currentlyPlayingAudio;
@@ -73,6 +77,7 @@ const clearCurrentlyPlayingAudioState = ({
   currentlyPlayingAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
   setCurrentlyPlayingLetter: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
+  if (!currentlyPlayingAudioRef.current) return;
   pauseCurrentlyPlayingAudio(currentlyPlayingAudioRef);
   currentlyPlayingAudioRef.current = null;
   setCurrentlyPlayingLetter(null);
@@ -110,7 +115,7 @@ function App() {
               return null;
             }
 
-            const letterIsCurrentlyPlaying = currentlyPlayingLetter === letter;
+            const buttonLetterIsAlreadyPlaying = currentlyPlayingLetter === letter;
 
             return (
               <button
@@ -122,17 +127,23 @@ function App() {
                     setCurrentlyPlayingLetter,
                   });
 
-                  if (letterIsCurrentlyPlaying) {
+                  if (buttonLetterIsAlreadyPlaying) {
                     return;
                   }
 
-                  setCurrentlyPlayingLetter(letter);
                   const currentlyPlayingAudio = playSound({
                     letter,
                     audioRefs,
                     mode: selectedMode,
-                    onEnded: () => setCurrentlyPlayingLetter(null),
+                    onEnded: () => {
+                      clearCurrentlyPlayingAudioState({
+                        currentlyPlayingAudioRef,
+                        setCurrentlyPlayingLetter,
+                      });
+                    },
                   });
+
+                  setCurrentlyPlayingLetter(letter);
                   currentlyPlayingAudioRef.current = currentlyPlayingAudio;
                 }}
                 disabled={modeIsMissing}
@@ -143,7 +154,7 @@ function App() {
                     'grid place-items-center p-2 py-[12px] px-[42px] rounded-2xl text-[32px] font-semibold bg-stone-300 text-stone-600 -translate-y-[6px] min-h-[80px]'
                   )}
                 >
-                  {letterIsCurrentlyPlaying ? <Pause /> : alphabet[letter][selectedMode]}
+                  {buttonLetterIsAlreadyPlaying ? <Pause /> : alphabet[letter][selectedMode]}
                 </span>
               </button>
             );
