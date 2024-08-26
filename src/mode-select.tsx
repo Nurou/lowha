@@ -7,14 +7,12 @@ import {
   SelectLabel,
   SelectValue,
 } from './@/components/ui/select';
-import { ModeKey, Modes } from './constants';
+import { ModeKey, modes } from './constants';
 
 export const ModeSelect = ({
-  modes,
   defaultMode,
   changeMode,
 }: {
-  modes: Modes;
   defaultMode: ModeKey;
   changeMode: React.Dispatch<React.SetStateAction<ModeKey>>;
 }) => {

@@ -19,14 +19,14 @@ export const modes = {
     displayName: 'Saakin ( أَ + \ufe7f )',
     medial: null,
   },
-  saakin_u: {
-    arabicName: 'ضمة ساكنة',
-    displayName: 'Saakin ( أُ + \ufe7f )',
-    medial: null,
-  },
   saakin_i: {
     arabicName: 'كسرة ساكنة',
     displayName: 'Saakin ( إِ + \ufe7f )',
+    medial: null,
+  },
+  saakin_u: {
+    arabicName: 'ضمة ساكنة',
+    displayName: 'Saakin ( أُ + \ufe7f )',
     medial: null,
   },
   combined: {

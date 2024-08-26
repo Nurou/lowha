@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { useRef, useState } from 'react';
 import { ModeSelect } from './mode-select';
-import { ModeKey, modes } from './constants';
+import { ModeKey } from './constants';
 import { Keyboard } from './keyboard';
 import { clearCurrentlyPlayingAudio } from './util';
 
@@ -18,7 +18,6 @@ const App = () => {
       <h1 className='text-4xl font-bold text-stone-600 py-8'>{'\ufdfd'}</h1>
       <div className='grid place-items-center py-4 text-2xl'>
         <ModeSelect
-          modes={modes}
           defaultMode={DEFAULT_MODE}
           changeMode={(mode) => {
             setSelectedMode(mode);
